@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Style Genome · 视觉基因 Schema（第一层：基础变量层 · 细分为 7 组）",
+  "description": "所有视觉差异抽象成这份 token 配置。一套代码，换这份 JSON 即换风格。七组变量：颜色 / 字体 / 排版 / 间距 / 圆角 / 阴影 / 动效曲线（排版、间距为细分新增）。",
+  "type": "object",
+  "required": ["id", "name", "category", "tokens"],
+  "properties": {
+    "id": { "type": "string", "description": "唯一 slug，如 cyberpunk" },
+    "name": { "type": "string", "description": "中文名，如 赛博朋克" },
+    "category": { "type": "string", "description": "分类 id，见 SG_CATEGORIES" },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "recommendedEffects": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "这套风格推荐默认开启的特效开关"
+    },
+    "tokens": {
+      "type": "object",
+      "required": ["color", "font", "radius", "shadow", "easing"],
+      "properties": {
+        "color": {
+          "type": "object",
+          "properties": {
+            "bg": { "type": "string", "description": "页面底色" },
+            "bg2": { "type": "string", "description": "次级底色 / section 交替" },
+            "surface": { "type": "string", "description": "卡片/面板表面色" },
+            "ink": { "type": "string", "description": "主文字色" },
+            "inkMut": { "type": "string", "description": "次级文字色（约 66%）" },
+            "inkDim": { "type": "string", "description": "弱化文字色（约 42%）" },
+            "primary": { "type": "string", "description": "主色（按钮/强调）" },
+            "primaryContrast": { "type": "string", "description": "主色上的文字色" },
+            "secondary": { "type": "string", "description": "辅色" },
+            "accent": { "type": "string", "description": "点缀色（徽标/高亮）" },
+            "line": { "type": "string", "description": "分割线/描边" },
+            "glass": { "type": "string", "description": "毛玻璃底色（fx-glass 用）" },
+            "gradient": { "type": "string", "description": "主渐变（Hero/CTA 背景）" }
+          }
+        },
+        "font": {
+          "type": "object",
+          "properties": {
+            "display": { "type": "string", "description": "标题字族（含中文回退栈）" },
+            "body": { "type": "string", "description": "正文字族" },
+            "mono": { "type": "string", "description": "等宽/数字字族" },
+            "fwDisplay": { "type": "number", "description": "标题字重" },
+            "fwBody": { "type": "number", "description": "正文字重" },
+            "lineHeight": { "type": "number", "description": "正文行高" },
+            "scale": { "type": "number", "description": "标题字号比例（1.2=紧凑，1.5=戏剧化）" },
+            "letterSpacing": { "type": "string", "description": "全局字距（如 '-0.01em'）" }
+          }
+        },
+        "radius": {
+          "type": "object",
+          "properties": {
+            "button": { "type": "string", "description": "按钮圆角（0px=硬朗，32px=可爱）" },
+            "card": { "type": "string", "description": "卡片圆角" },
+            "input": { "type": "string", "description": "输入框圆角" }
+          }
+        },
+        "shadow": {
+          "type": "object",
+          "properties": {
+            "card": { "type": "string", "description": "卡片投影" },
+            "button": { "type": "string", "description": "按钮投影" },
+            "inset": { "type": "string", "description": "内阴影/描边" },
+            "glow": { "type": "string", "description": "发光（霓虹/Glitch 用）" }
+          }
+        },
+        "easing": {
+          "type": "object",
+          "properties": {
+            "in": { "type": "string" },
+            "out": { "type": "string" },
+            "inout": { "type": "string" },
+            "bounce": { "type": "string" },
+            "linear": { "type": "string" }
+          }
+        },
+        "type": {
+          "type": "object",
+          "description": "【细分·排版基因】标题对齐/变换、正文字号、最大行宽",
+          "properties": {
+            "maxWidth": { "type": "string", "description": "正文最大行宽（可读性，如 65ch）" },
+            "bodySize": { "type": "string", "description": "正文基准字号（如 16px）" },
+            "headingTransform": { "type": "string", "description": "标题变换 none / uppercase / capitalize" },
+            "headingAlign": { "type": "string", "description": "标题对齐 left / center / right" },
+            "sectionAlign": { "type": "string", "description": "Hero 区块对齐 left / center" },
+            "headingSpacing": { "type": "string", "description": "标题字距（如 -0.02em）" }
+          }
+        },
+        "spacing": {
+          "type": "object",
+          "description": "【细分·间距基因】基准间距、区块留白、栅格间距",
+          "properties": {
+            "unit": { "type": "string", "description": "基准间距单位（4px 紧凑 / 8px 常规 / 10px 宽松）" },
+            "section": { "type": "string", "description": "区块纵向留白" },
+            "gap": { "type": "string", "description": "栅格/卡片间距" },
+            "container": { "type": "string", "description": "内容最大宽度" },
+            "stack": { "type": "string", "description": "块间节奏" }
+          }
+        }
+      }
+    }
+  }
+}

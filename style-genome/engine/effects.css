@@ -1,0 +1,88 @@
+/* =====================================================================
+ * Style Genome · effects.css（第四层：氛围滤镜）
+ * ---------------------------------------------------------------------
+ * 9 种特效开关，叠加在基础层之上，一键切换「妆容」。
+ * 开关 = 在 .sg-root 上加减 class（fx-glass / fx-noise / fx-paper /
+ * fx-parallax / fx-cursor-glow / fx-page-transition / fx-pixel-font /
+ * fx-glitch / fx-neon）。
+ * ===================================================================== */
+
+/* ---------- 毛玻璃（质感） ---------- */
+.fx-glass .sg-card, .fx-glass .sg-nav, .fx-glass .sg-plan, .fx-glass .sg-count {
+  background: var(--sg-glass);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+}
+
+/* ---------- 噪点纹理（质感） ---------- */
+.fx-noise { position: relative; }
+.fx-noise::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999;
+  opacity: .07; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- 纸张纹理（质感） ---------- */
+.fx-paper { position: relative; }
+.fx-paper::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: -1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='3' seed='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.5'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply; opacity: .35;
+}
+
+/* ---------- 像素字体强制替换（极端风格） ---------- */
+.fx-pixel-font {
+  --sg-f-display: "Press Start 2P","Courier New",monospace;
+  --sg-f-body: "Press Start 2P","Courier New",monospace;
+  --sg-f-mono: "Press Start 2P","Courier New",monospace;
+  -webkit-font-smoothing: none;
+  image-rendering: pixelated;
+}
+
+/* ---------- 霓虹发光描边（极端风格） ---------- */
+.fx-neon h1, .fx-neon h2, .fx-neon .sg-kicker {
+  text-shadow: 0 0 6px var(--sg-primary), 0 0 22px var(--sg-primary), 0 0 44px var(--sg-secondary);
+}
+.fx-neon .sg-btn.primary { box-shadow: 0 0 12px var(--sg-primary), 0 0 32px var(--sg-primary); }
+.fx-neon .sg-plan.featured { border-color: var(--sg-primary); box-shadow: 0 0 24px var(--sg-primary); }
+
+/* ---------- 故障闪烁 Glitch（极端风格） ---------- */
+.fx-glitch { position: relative; }
+.fx-glitch::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 998;
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0 1px, transparent 1px 3px);
+  animation: sg-scan .12s steps(2) infinite;
+}
+@keyframes sg-scan { 0% { transform: translateY(0); } 100% { transform: translateY(3px); } }
+.fx-glitch h1, .fx-glitch h2, .fx-glitch .brand {
+  animation: sg-glitch 3.2s infinite steps(1);
+}
+@keyframes sg-glitch {
+  0%, 100% { text-shadow: 0 0 0 transparent; transform: none; }
+  7%  { text-shadow: -3px 0 var(--sg-secondary), 3px 0 var(--sg-accent); transform: translateX(1px); }
+  8%  { text-shadow: 3px 0 var(--sg-secondary), -3px 0 var(--sg-accent); transform: translateX(-1px); }
+  9%  { text-shadow: 0 0 0 transparent; transform: none; }
+  53% { text-shadow: -4px 0 var(--sg-secondary), 4px 0 var(--sg-accent); transform: skewX(3deg); }
+  54% { text-shadow: 0 0 0 transparent; transform: none; }
+}
+
+/* ---------- 鼠标跟随光晕（动效，JS 配合） ---------- */
+.fx-cursor-glow .sg-glow {
+  position: fixed; width: 420px; height: 420px; border-radius: 50%;
+  pointer-events: none; z-index: 0; opacity: .22; filter: blur(60px);
+  background: var(--sg-gradient);
+  transform: translate(-50%, -50%);
+  transition: opacity .3s var(--sg-e-out);
+}
+
+/* ---------- 页面转场（动效，JS 配合：入场揭示） ---------- */
+.fx-page-transition .sg-hero > *, .fx-page-transition .sg-section > .sg-container > * {
+  opacity: 0; transform: translateY(26px);
+  transition: opacity .7s var(--sg-e-out), transform .7s var(--sg-e-out);
+}
+.fx-page-transition .sg-hero > *.in, .fx-page-transition .sg-section > .sg-container > *.in {
+  opacity: 1; transform: none;
+}
+
+/* ---------- 滚动视差（动效，JS 配合） ---------- */
+.fx-parallax [data-parallax] { will-change: transform; }

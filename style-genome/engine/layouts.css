@@ -1,0 +1,60 @@
+/* =====================================================================
+ * Style Genome · layouts.css（第三层：布局骨架）
+ * ---------------------------------------------------------------------
+ * 6 种经典页面骨架，与主题无关。先定「户型」再填「肉」。
+ * 约定：.sg-root 的直接子元素是 [.sg-side? , .sg-stage-body]。
+ * 在 .sg-root 上切换 class：stack / split / fullscreen / masonry /
+ * center / docked。
+ * ===================================================================== */
+
+/* 默认隐藏仅特定骨架使用的元素，避免在其它骨架下错位 */
+.sg-root .sg-side { display: none; }
+.sg-root .sg-dock { display: none; }
+.sg-root.layout-split .sg-side { display: block; }
+.sg-root.layout-docked .sg-dock { display: flex; }
+
+/* 1. 上下结构（导航 + 内容 + 页脚）—— 作品集 / 大会页 */
+.sg-root.layout-stack { display: flex; flex-direction: column; }
+.sg-root.layout-stack .sg-stage-body { flex: 1; }
+
+/* 2. 左右分栏（左菜单/目录 + 右详情）—— 教育闯关 / 后台 */
+.sg-root.layout-split { display: grid; grid-template-columns: 240px 1fr; grid-template-areas: "side body"; }
+.sg-root.layout-split .sg-side {
+  grid-area: side; padding: 1.5rem 1.1rem; border-right: 1px solid var(--sg-line);
+  background: var(--sg-bg2); position: sticky; top: 0; height: 100vh; overflow: auto;
+}
+.sg-root.layout-split .sg-side .side-brand { font-family: var(--sg-f-display); font-weight: var(--sg-fw-display); margin-bottom: 1rem; }
+.sg-root.layout-split .sg-side a { display: block; padding: .55em .8em; border-radius: var(--sg-r-input); color: var(--sg-ink-mut); margin-bottom: .3em; transition: background .2s var(--sg-e-out), color .2s var(--sg-e-out); }
+.sg-root.layout-split .sg-side a:hover, .sg-root.layout-split .sg-side a.active { background: var(--sg-primary); color: var(--sg-primary-contrast); }
+.sg-root.layout-split .sg-stage-body { grid-area: body; min-width: 0; }
+
+/* 3. 单屏全屏滚动（每屏占满视口）—— 3D 拆解 / 品牌故事 */
+.sg-root.layout-fullscreen .sg-stage-body > .sg-section,
+.sg-root.layout-fullscreen .sg-stage-body > .sg-hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+
+/* 4. 瀑布流 / 网格（图片/卡片错落）—— 摄影画廊 */
+.sg-root.layout-masonry .sg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); grid-auto-rows: 12px; gap: 1rem; }
+.sg-root.layout-masonry .sg-grid > * { grid-row: span 12; }
+.sg-root.layout-masonry .sg-grid > *:nth-child(2n) { grid-row: span 16; }
+.sg-root.layout-masonry .sg-grid > *:nth-child(3n) { grid-row: span 9; }
+
+/* 5. 中心聚焦式（中间表单/CTA，四周留白）—— 预售落地页 */
+.sg-root.layout-center .sg-stage-body { max-width: 760px; margin: 0 auto; text-align: center; }
+.sg-root.layout-center .sg-form, .sg-root.layout-center .sg-countdown, .sg-root.layout-center .sg-pricing, .sg-root.layout-center .sg-special-grid { margin-left: auto; margin-right: auto; }
+.sg-root.layout-center .sg-hero h1, .sg-root.layout-center .sg-hero .sub { margin-left: auto; margin-right: auto; }
+.sg-root.layout-center .sg-hero .cta { justify-content: center; }
+
+/* 6. 侧边浮窗式（主内容 + 浮动购物车/进度条）—— 电商预售 */
+.sg-root.layout-docked .sg-dock {
+  position: fixed; right: 1.5rem; top: 50%; transform: translateY(-50%); z-index: 60;
+  background: var(--sg-surface); border: 1px solid var(--sg-line);
+  border-radius: var(--sg-r-card); box-shadow: var(--sg-sh-card);
+  padding: .9rem; display: flex; flex-direction: column; gap: .7rem;
+}
+
+/* 响应式：窄屏把分栏 / 侧边浮窗降级为上下结构 */
+@media (max-width: 860px) {
+  .sg-root.layout-split { grid-template-columns: 1fr; grid-template-areas: "side" "body"; }
+  .sg-root.layout-split .sg-side { position: static; height: auto; display: flex; flex-wrap: wrap; gap: .4rem; }
+  .sg-root.layout-docked .sg-dock { position: static; flex-direction: row; margin: 0 1rem 1rem; transform: none; }
+}

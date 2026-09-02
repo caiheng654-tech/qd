@@ -1,0 +1,61 @@
+{
+  "slug": "lusion",
+  "name": "Lusion",
+  "url": "https://lusion.co",
+  "type": "role-model",
+  "rank": "high",
+  "style": "3D 沉浸式交互叙事 / 画布叙事 / 暗亮双主题",
+  "harvestedAt": "2026-09-02T16:06:30",
+  "source": {
+    "meta": "assets/role-models/lusion/meta.md",
+    "tokens": "assets/role-models/lusion/tokens.json"
+  },
+  "genes": {
+    "visual": {
+      "color": {
+        "palette": [
+          "#FFFFFF",
+          "#000000"
+        ],
+        "hint": {
+          "bg_light": "#ffffff",
+          "bg_dark": "#000000",
+          "text": "#000000",
+          "text_invert": "#ffffff",
+          "accent_grain": "video/texture overlays"
+        }
+      },
+      "font": {
+        "families": [],
+        "hint": {
+          "hero": "large display, near-inverts with theme",
+          "aux": "small, high letter-spacing, minimal HUD"
+        }
+      }
+    },
+    "behavior": {
+      "motion": "sharp",
+      "transition": "slide-up",
+      "camera": "parallax"
+    },
+    "content": {
+      "creative": "data",
+      "tone": "minimal"
+    },
+    "grammar": {
+      "concept": [
+        "C2",
+        "C5"
+      ],
+      "sceneTransition": [
+        "T2",
+        "T4",
+        "T5"
+      ],
+      "textMotion": [
+        "M3",
+        "M5"
+      ]
+    }
+  }
+}

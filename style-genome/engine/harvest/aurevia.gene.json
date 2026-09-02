@@ -1,0 +1,65 @@
+{
+  "slug": "aurevia",
+  "name": "Aurevia",
+  "url": "https://aurevia-studio.pages.dev/",
+  "type": "role-model",
+  "rank": "high",
+  "style": "精品设计工作室 / 3D 粒子走廊空间叙事 / 站点轮播 / 深暖黑+金属金+极光粒子 / HUD 数据化氛围",
+  "harvestedAt": "2026-09-02T16:06:30",
+  "source": {
+    "meta": "assets/role-models/aurevia/meta.md",
+    "tokens": "assets/role-models/aurevia/tokens.json"
+  },
+  "genes": {
+    "visual": {
+      "color": {
+        "palette": [
+          "#0A0805",
+          "#D4AF37"
+        ],
+        "hint": {
+          "bg": "warm near-black #0a0805 (warm-tinted, not pure black)",
+          "accent": "metallic gold #d4af37",
+          "particles": "aurora gradient: warm gold/orange -> teal/green -> coral red",
+          "text": "cream/off-white",
+          "mood": "cinematic, warm, luxurious (film grain + vignette)"
+        }
+      },
+      "font": {
+        "families": [
+          "serif",
+          "sans",
+          "mono"
+        ],
+        "hint": {
+          "display": "serif (humanistic/historical resonance with 'place')",
+          "body": "sans-serif",
+          "hud": "monospace (STATION 01/8, DEPTH 0007 readouts)"
+        }
+      }
+    },
+    "behavior": {
+      "motion": "luxe",
+      "transition": "zoom",
+      "camera": "parallax"
+    },
+    "content": {
+      "creative": "data",
+      "tone": "minimal"
+    },
+    "grammar": {
+      "concept": [
+        "C1",
+        "C5"
+      ],
+      "sceneTransition": [
+        "T6",
+        "T7"
+      ],
+      "textMotion": [
+        "M8",
+        "M9"
+      ]
+    }
+  }
+}

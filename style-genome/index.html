@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>风格基因库 · Style Genome — 四维基因细分换肤引擎</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;400;500;600;700;900&family=ZCOOL+KuaiLe&family=Press+Start+2P&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="engine/base.css">
+<link rel="stylesheet" href="engine/layouts.css">
+<link rel="stylesheet" href="engine/effects.css">
+<link rel="stylesheet" href="engine/genes.css">
+<style>
+  :root { --chrome-bg:#f6f6f8; --chrome-line:#e6e6eb; --chrome-ink:#1d1d1f; --chrome-mut:#6e6e73; --chrome-accent:#3a6df0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; color: var(--chrome-ink); background: var(--chrome-bg); }
+
+  .app { display: flex; height: 100vh; }
+
+  /* ---------- 左侧控制台 ---------- */
+  .panel { width: 348px; flex-shrink: 0; overflow-y: auto; background: var(--chrome-bg); border-right: 1px solid var(--chrome-line); padding: 20px 18px 40px; }
+  .panel h1 { font-size: 18px; margin: 0 0 4px; letter-spacing: -.02em; }
+  .panel .tagline { font-size: 12.5px; color: var(--chrome-mut); margin: 0 0 18px; line-height: 1.5; }
+  .panel .sec { margin-bottom: 24px; }
+  .panel .sec > h2 { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--chrome-accent); margin: 0 0 10px; display:flex; align-items:center; gap:6px; }
+  .panel .sec > h2::before { content:""; width:6px; height:6px; border-radius:50%; background: var(--chrome-accent); }
+  .panel .sub { font-size: 12px; color: var(--chrome-mut); margin: 10px 0 6px; font-weight: 600; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pill {
+    border: 1px solid var(--chrome-line); background: #fff; color: var(--chrome-ink);
+    border-radius: 8px; padding: 7px 11px; font-size: 12.5px; cursor: pointer;
+    transition: all .18s ease;
+  }
+  .pill:hover { border-color: #c9c9d1; }
+  .pill.on { background: var(--chrome-ink); color: #fff; border-color: var(--chrome-ink); }
+
+  .preset-list { display: flex; flex-direction: column; gap: 6px; max-height: 280px; overflow-y: auto; }
+  .preset-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border: 1px solid transparent; border-radius: 10px; cursor: pointer; background: #fff; transition: all .18s ease; }
+  .preset-item:hover { border-color: #d8d8de; }
+  .preset-item.on { border-color: var(--chrome-accent); box-shadow: 0 0 0 3px rgba(58,109,240,.12); }
+  .swatch { display: flex; gap: 3px; }
+  .swatch i { width: 14px; height: 14px; border-radius: 4px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
+  .preset-item .nm { font-size: 13px; font-weight: 600; }
+  .preset-item .tg { font-size: 11px; color: var(--chrome-mut); margin-left: auto; }
+  .preset-item .src { font-size: 9.5px; font-weight: 700; letter-spacing: .02em; color: #7a5c00; background: #fff4d6; border: 1px solid #f0dca0; border-radius: 4px; padding: 1px 5px; flex-shrink: 0; }
+  .pool { margin-top: 10px; padding: 9px 10px; background: #f3f6ff; border: 1px solid #dbe4ff; border-radius: 8px; font-size: 11.5px; line-height: 1.6; color: var(--chrome-mut); }
+  .pool b { color: var(--chrome-ink); }
+  .quote-item { display: flex; align-items: center; gap: 8px; font-size: 12.5px; padding: 6px 2px; border-bottom: 1px dashed var(--chrome-line); }
+  .quote-item .qn { flex: 1; min-width: 0; }
+  .quote-item .qn small { display: block; color: var(--chrome-mut); font-size: 10.5px; }
+  .quote-item input.qp { width: 58px; text-align: right; border: 1px solid var(--chrome-line); border-radius: 6px; padding: 3px 5px; font-size: 12px; color: var(--chrome-ink); }
+  .quote-item .qsub { color: var(--chrome-accent); font-weight: 700; font-size: 12px; width: 66px; text-align: right; flex-shrink: 0; }
+  .quote-total { margin-top: 12px; padding: 12px 14px; background: var(--chrome-ink); color: #fff; border-radius: 10px; }
+  .quote-total .row { display: flex; justify-content: space-between; align-items: baseline; }
+  .quote-total .amt { font-size: 22px; font-weight: 800; }
+  .quote-total .hint { font-size: 10.5px; opacity: .72; margin-top: 3px; }
+
+  .chk { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 5px 2px; cursor: pointer; user-select: none; }
+  .chk input { accent-color: var(--chrome-accent); width: 15px; height: 15px; cursor: pointer; }
+  .chk .fx-tag { font-size: 10px; color: #fff; background: var(--chrome-mut); border-radius: 4px; padding: 1px 5px; margin-left: auto; }
+  .chk .fx-tag.css { background: #9aa0a6; }
+  .chk .fx-tag.js { background: var(--chrome-accent); }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    border: none; cursor: pointer; border-radius: 9px; font-size: 13px; font-weight: 600;
+    padding: 10px 14px; transition: all .18s ease;
+  }
+  .btn.primary { background: var(--chrome-accent); color: #fff; width: 100%; }
+  .btn.primary:hover { filter: brightness(1.06); }
+  .btn.ghost { background: #fff; border: 1px solid var(--chrome-line); color: var(--chrome-ink); }
+  .btn.ghost:hover { border-color: #c9c9d1; }
+  .btn-row { display: flex; gap: 8px; }
+  .export-box { margin-top: 10px; }
+  .export-box textarea { width: 100%; height: 150px; font: 11px/1.4 "JetBrains Mono",ui-monospace,monospace; border: 1px solid var(--chrome-line); border-radius: 8px; padding: 8px; background: #fff; resize: vertical; color: #333; }
+
+  /* ---------- 右侧预览 ---------- */
+  .preview { flex: 1; overflow-y: auto; position: relative; background: #e8e8ed; }
+  .preview-top {
+    position: sticky; top: 0; z-index: 100; display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px; background: rgba(255,255,255,.86); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--chrome-line);
+  }
+  .preview-top .cur { font-size: 13px; font-weight: 600; }
+  .preview-top .meta { font-size: 12px; color: var(--chrome-mut); }
+  .preview-top .spacer { flex: 1; }
+
+  /* 内容区：特殊模块面板（主题中立，用 --sg-* 变量） */
+  .sg-special-grid { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .sg-panel { border: 1px solid var(--sg-line); border-radius: var(--sg-r-card); padding: 1.1rem; background: var(--sg-surface); box-shadow: var(--sg-sh-card); }
+  .sg-panel h3 { margin: 0 0 .8rem; }
+  .sg-slot { min-height: 140px; position: relative; }
+
+  @media (max-width: 720px) {
+    .app { flex-direction: column; height: auto; }
+    .panel { width: 100%; border-right: none; border-bottom: 1px solid var(--chrome-line); }
+    .preview { height: 70vh; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="panel">
+    <h1>🧬 风格基因库</h1>
+    <p class="tagline">四维基因细分引擎 · 视觉 / 行为 / 结构 / 内容自由组合。选基因 → 换装即时预览 → 导出基因组 JSON。</p>
+
+    <div class="sec">
+      <h2>① 视觉基因 · 皮肤</h2>
+      <div class="pill-row" id="cats"></div>
+      <div class="preset-list" id="presets" style="margin-top:10px"></div>
+      <div class="pool" id="poolNote"></div>
+    </div>
+
+    <div class="sec">
+      <h2>② 结构基因 · 骨架</h2>
+      <div class="sub">布局骨架</div>
+      <div class="pill-row" id="layouts"></div>
+      <div class="sub">组件变体 · 按钮</div>
+      <div class="pill-row" id="cButton"></div>
+      <div class="sub">组件变体 · 卡片</div>
+      <div class="pill-row" id="cCard"></div>
+      <div class="sub">组件变体 · 输入框</div>
+      <div class="pill-row" id="cInput"></div>
+      <div class="sub">3D 场景</div>
+      <div class="pill-row" id="scene3d"></div>
+      <div class="sub">特殊模块（按需启用）</div>
+      <div id="specials"></div>
+    </div>
+
+    <div class="sec">
+      <h2>③ 行为基因 · 动效</h2>
+      <div class="sub">动效 <small style="font-weight:400;color:var(--chrome-mut)">多选 · 最后勾选生效</small></div>
+      <div id="motion"></div>
+      <div class="sub">转场 <small style="font-weight:400;color:var(--chrome-mut)">多选 · 最后勾选生效</small></div>
+      <div id="transition"></div>
+      <div class="sub">推镜 <small style="font-weight:400;color:var(--chrome-mut)">多选 · 可叠加</small></div>
+      <div id="camera"></div>
+      <div class="sub">特效（妆容）</div>
+      <div id="effects"></div>
+    </div>
+
+    <div class="sec">
+      <h2>④ 内容基因 · 文案</h2>
+      <div class="sub">语言</div>
+      <div class="pill-row" id="language"></div>
+      <div class="sub">文案语气</div>
+      <div class="pill-row" id="tone"></div>
+      <div class="sub">创意方向</div>
+      <div class="pill-row" id="creative"></div>
+    </div>
+
+    <div class="sec">
+      <h2>⑤ 导出基因组</h2>
+      <div class="btn-row">
+        <button class="btn primary" id="btnExport">⬇ 导出 genome.json</button>
+        <button class="btn ghost" id="btnCopy">复制</button>
+      </div>
+      <div class="export-box"><textarea id="exportArea" readonly placeholder="点击导出后显示当前完整基因组 JSON"></textarea></div>
+    </div>
+
+    <div class="sec">
+      <h2>⑥ 报价预估（按复杂度）</h2>
+      <div class="sub">复杂程度</div>
+      <div class="pill-row" id="complexity"></div>
+      <div id="quoteItems" style="margin-top:10px"></div>
+      <div class="quote-total" id="quoteTotal"></div>
+      <p style="font-size:10.5px;color:var(--chrome-mut);margin:8px 2px 0;line-height:1.5">单价为参考价，可点击数字直接改。复制报价请用下方第⑦区「复制完整选型单」（已含报价单）。</p>
+    </div>
+
+    <div class="sec">
+      <h2>⑦ 一键交付 · 客户回传</h2>
+      <div class="btn-row">
+        <button class="btn primary" id="btnShare">🔗 复制分享链接</button>
+      </div>
+      <div class="btn-row" style="margin-top:8px">
+        <button class="btn ghost" id="btnBrief">📋 复制完整选型单</button>
+      </div>
+      <p style="font-size:10.5px;color:var(--chrome-mut);margin:8px 2px 0;line-height:1.5">客户勾完点「复制分享链接」发回给你；你打开链接自动还原勾选，再点「复制完整选型单」粘贴即可直接开工。</p>
+    </div>
+  </aside>
+
+  <main class="preview" id="preview">
+    <div class="preview-top">
+      <span class="cur" id="curName">—</span>
+      <span class="meta" id="curMeta">—</span>
+      <span class="spacer"></span>
+      <button class="btn ghost" id="btnRandom">🎲 随机换装</button>
+    </div>
+    <div class="sg-root layout-stack" id="stage"></div>
+  </main>
+</div>
+
+<script src="engine/presets.js"></script>
+<script src="engine/theme-engine.js"></script>
+<script src="engine/components.js"></script>
+<script src="engine/effects.js"></script>
+<script src="engine/special.js"></script>
+<script src="engine/genes.js"></script>
+<script>
+(function () {
+  'use strict';
+  var stage = document.getElementById('stage');
+  var G = window.SG_GENES;
+
+  var LAYOUTS = [
+    ['stack', '上下结构'], ['split', '左右分栏'], ['fullscreen', '单屏全屏'],
+    ['masonry', '瀑布流网格'], ['center', '中心聚焦'], ['docked', '侧边浮窗']
+  ];
+  var SPECIALS = [
+    ['particles', '粒子背景'], ['threeD', '3D 容器'], ['pixel', '像素画布'], ['audio', '音频播放器']
+  ];
+
+  function el(tag, cls, html) { var n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; }
+
+  var state = {
+    theme: 'cyberpunk',
+    layout: 'stack',
+    component: { button: 'pill', card: 'elevated', input: 'box' },
+    scene3d: 'torus',
+    motion: ['calm'], transition: ['fade'], camera: ['static'], effects: [],
+    language: 'zh-CN', tone: '', creative: '',
+    special: {}
+  };
+
+  /* ---------- 构建预览页（只构建一次，文案挂 data-i18n） ---------- */
+  function buildSpecialSection() {
+    var sec = el('section', 'sg-section alt');
+    var wrap = el('div', 'sg-container');
+    var h = el('h2', '', '特殊模块库（按需启用）');
+    h.setAttribute('data-i18n', 'sec.special');
+    wrap.appendChild(h);
+    var grid = el('div', 'sg-special-grid');
+    SPECIALS.forEach(function (s) {
+      var p = el('div', 'sg-panel');
+      p.appendChild(el('h3', '', s[1]));
+      var slot = el('div', 'sg-slot');
+      slot.setAttribute('data-slot', s[0]);
+      p.appendChild(slot);
+      grid.appendChild(p);
+    });
+    wrap.appendChild(grid);
+    sec.appendChild(wrap);
+    return sec;
+  }
+
+  function title(el, key) { el.setAttribute('data-i18n', key); return el; }
+
+  function buildPage() {
+    stage.innerHTML = '';
+
+    var side = el('aside', 'sg-side');
+    side.appendChild(el('div', 'side-brand', 'SG·DEMO'));
+    [['nav.home', '首页'], ['nav.product', '产品'], ['nav.cases', '案例'], ['nav.price', '价格'], ['nav.about', '关于']].forEach(function (t, i) {
+      var a = el('a', i === 0 ? 'active' : '', t[1]);
+      a.setAttribute('data-i18n', t[0]);
+      side.appendChild(a);
+    });
+    stage.appendChild(side);
+
+    var body = el('div', 'sg-stage-body');
+
+    var nav = SGComponents.navbar({ brand: 'SG·DEMO', cta: '立即预约' });
+    var links = nav.querySelectorAll('.links a');
+    [['nav.home'], ['nav.product'], ['nav.cases'], ['nav.price'], ['nav.about'], ['nav.cta']].forEach(function (k, i) {
+      if (links[i]) links[i].setAttribute('data-i18n', k[0]);
+    });
+    body.appendChild(nav);
+
+    var heroEl = SGComponents.hero({
+      kicker: 'Style Genome · 四层架构引擎',
+      title: '一套代码，二十种皮肤',
+      sub: '这是换肤引擎的演示预售页。左侧换一套风格基因，整个页面即时换装——颜色、字体、圆角、阴影、动效曲线全部重刷。'
+    });
+    heroEl.querySelector('.sg-kicker').setAttribute('data-i18n', 'hero.kicker');
+    heroEl.querySelector('h1').setAttribute('data-i18n', 'hero.title');
+    heroEl.querySelector('.sub').setAttribute('data-i18n', 'hero.sub');
+    heroEl.querySelector('.cta .primary').setAttribute('data-i18n', 'hero.ctaPrimary');
+    heroEl.querySelector('.cta .ghost').setAttribute('data-i18n', 'hero.ctaGhost');
+    heroEl.querySelector('h1').setAttribute('data-parallax', '0.05');
+    heroEl.querySelector('.sub').setAttribute('data-parallax', '0.03');
+    body.appendChild(heroEl);
+
+    var c1 = SGComponents.cardList({ title: '为什么用这套系统' });
+    title(c1.querySelector('h2'), 'sec.why');
+    body.appendChild(c1);
+
+    var c2 = SGComponents.countdown({ title: '距离正式发布' });
+    title(c2.querySelector('h2'), 'sec.countdown');
+    body.appendChild(c2);
+
+    var c3 = SGComponents.pricing({ title: '定价方案' });
+    title(c3.querySelector('h2'), 'sec.pricing');
+    body.appendChild(c3);
+
+    var c4 = SGComponents.carousel({ title: '他们怎么说' });
+    title(c4.querySelector('h2'), 'sec.carousel');
+    body.appendChild(c4);
+
+    var c5 = SGComponents.form({ title: '预约演示' });
+    title(c5.querySelector('h2'), 'sec.form');
+    body.appendChild(c5);
+
+    body.appendChild(buildSpecialSection());
+
+    var footer = el('footer', 'sg-footer');
+    var f1 = el('span', '', '© 2026 Style Genome · 一套代码，二十种皮肤');
+    var f2 = el('span', '', '四层架构 · Design Tokens → Headless → Layout → Effect');
+    f1.setAttribute('data-i18n', 'footer.line1');
+    f2.setAttribute('data-i18n', 'footer.line2');
+    footer.appendChild(f1); footer.appendChild(f2);
+    body.appendChild(footer);
+
+    stage.appendChild(body);
+
+    var dock = el('div', 'sg-dock');
+    dock.innerHTML = '<span style="font-family:var(--sg-f-display);font-weight:700">🛒</span><span style="font-size:.8rem">已选 1 件<br>¥ 299</span><button class="sg-btn primary" style="font-size:.8rem;padding:.5em .8em">结算</button>';
+    stage.appendChild(dock);
+  }
+
+  /* ---------- 通用 pill 组渲染 ---------- */
+  function renderPills(boxId, items, current, onPick, allowNone) {
+    var box = document.getElementById(boxId);
+    box.innerHTML = '';
+    if (allowNone) {
+      var n = el('button', 'pill' + (current === '' ? ' on' : ''), '默认');
+      n.onclick = function () { onPick(''); };
+      box.appendChild(n);
+    }
+    items.forEach(function (it) {
+      var b = el('button', 'pill' + (current === it.id ? ' on' : ''), it.name);
+      b.onclick = function () { onPick(it.id); };
+      box.appendChild(b);
+    });
+  }
+
+  /* ---------- 控制台渲染 ---------- */
+  var filterCat = null;
+  function renderCats() {
+    var box = document.getElementById('cats');
+    box.innerHTML = '';
+    SG.categories.forEach(function (c) {
+      var b = el('button', 'pill' + (filterCat === c.id ? ' on' : ''), c.name);
+      b.onclick = function () { filterCat = c.id; renderCats(); renderPresets(); };
+      box.appendChild(b);
+    });
+  }
+  function renderPresets() {
+    var box = document.getElementById('presets');
+    box.innerHTML = '';
+    SG.presets.filter(function (p) { return !filterCat || p.category === filterCat; }).forEach(function (p) {
+      var item = el('div', 'preset-item' + (state.theme === p.id ? ' on' : ''));
+      var sw = el('span', 'swatch');
+      ['primary', 'secondary', 'accent'].forEach(function (k) {
+        var dot = el('i');
+        dot.style.background = p.tokens.color[k];
+        sw.appendChild(dot);
+      });
+      item.appendChild(sw);
+      item.appendChild(el('span', 'nm', p.name));
+      if (p.sourcedFrom) item.appendChild(el('span', 'src', '采集'));
+      item.appendChild(el('span', 'tg', p.tags.slice(0, 2).join('·')));
+      item.onclick = function () { setTheme(p.id); };
+      box.appendChild(item);
+    });
+  }
+  function renderPool() {
+    var box = document.getElementById('poolNote');
+    if (!box) return;
+    var srcs = SG.presets.filter(function (p) { return p.sourcedFrom; });
+    var models = srcs.filter(function (p) { return p.sourcedFrom.type === 'role-model'; }).length;
+    var sites = srcs.filter(function (p) { return p.sourcedFrom.type === 'site'; }).length;
+    box.innerHTML = '<b>采集源</b>：已沉淀 <b>' + srcs.length + '</b> 套高阶采集基因（<b>' + models + '</b> 套榜样级 + <b>' + sites + '</b> 套获奖参考站提炼）。' +
+      '采集池共 <b>4 榜样 · 33 参考站</b>，可持续用 <code>collect-genes.py</code> 采集沉淀，上限只升不降。';
+  }
+
+  /* ---------- 报价预估（勾选 → 预览 → 按复杂度报价） ---------- */
+  var LAYOUT_NAME = { stack: '上下结构', split: '左右分栏', fullscreen: '单屏全屏', masonry: '瀑布流网格', center: '中心聚焦', docked: '侧边浮窗' };
+  var PRICING = {
+    complexity: 'standard',
+    coeff: { simple: 0.8, standard: 1.0, complex: 1.4 },
+    engine: 1500, layout: 600, components: 2000, responsive: 1000,
+    effect: 400, special: 800, special3d: 1500, lang: 500, gene: 300
+  };
+
+  function quoteCounts() {
+    var specials = Object.keys(state.special).filter(function (k) { return state.special[k]; });
+    var sc = 0, s3d = 0;
+    specials.forEach(function (k) { if (k === 'threeD') s3d++; else sc++; });
+    var p = SG.getTheme(state.theme);
+    return {
+      effects: state.effects.length,
+      special: sc, special3d: s3d,
+      langs: state.language === 'zh-CN' ? 0 : 1,
+      gene: (p && p.sourcedFrom) ? 1 : 0
+    };
+  }
+
+  function quoteCalc() {
+    var c = quoteCounts();
+    var fixed = PRICING.engine + PRICING.layout + PRICING.components + PRICING.responsive;
+    var varSum = c.effects * PRICING.effect + c.special * PRICING.special + c.special3d * PRICING.special3d + c.langs * PRICING.lang + c.gene * PRICING.gene;
+    var raw = fixed + varSum;
+    var coeff = PRICING.coeff[PRICING.complexity] || 1;
+    return { c: c, fixed: fixed, varSum: varSum, raw: raw, coeff: coeff, total: Math.round(raw * coeff) };
+  }
+
+  function renderQuote() {
+    var box = document.getElementById('complexity');
+    if (!box) return;
+    box.innerHTML = '';
+    [['simple', '简单 ×0.8'], ['standard', '标准 ×1.0'], ['complex', '复杂 ×1.4']].forEach(function (d) {
+      var b = el('button', 'pill' + (PRICING.complexity === d[0] ? ' on' : ''), d[1]);
+      b.onclick = function () { PRICING.complexity = d[0]; renderQuote(); };
+      box.appendChild(b);
+    });
+
+    var calc = quoteCalc();
+    var rows = [
+      { k: 'engine', label: '换肤引擎接入', sub: '内核 + 26 套基因', n: 1 },
+      { k: 'layout', label: '布局骨架', sub: LAYOUT_NAME[state.layout] || state.layout, n: 1 },
+      { k: 'components', label: '组件套件', sub: '7 个 Headless 组件', n: 1 },
+      { k: 'responsive', label: '响应式适配', sub: '桌面 / 平板 / 移动', n: 1 },
+      { k: 'effect', label: '特效（妆容）', sub: '毛玻璃/噪点/霓虹…', n: calc.c.effects },
+      { k: 'special', label: '特殊模块', sub: '粒子/像素/音频', n: calc.c.special },
+      { k: 'special3d', label: '3D 容器', sub: 'Three.js 场景', n: calc.c.special3d },
+      { k: 'lang', label: '多语言', sub: '中英繁（中文免费）', n: calc.c.langs },
+      { k: 'gene', label: '榜样基因', sub: '天花板级 · 含溯源', n: calc.c.gene }
+    ];
+
+    var items = document.getElementById('quoteItems');
+    items.innerHTML = '';
+    rows.forEach(function (r) {
+      var row = el('div', 'quote-item');
+      var qn = el('span', 'qn');
+      qn.appendChild(document.createTextNode(r.label));
+      qn.appendChild(el('small', '', r.sub));
+      row.appendChild(qn);
+      row.appendChild(el('span', 'qsub', '×' + r.n));
+      var input = el('input', 'qp');
+      input.type = 'number'; input.min = '0'; input.step = '50'; input.value = PRICING[r.k];
+      input.onchange = function () { PRICING[r.k] = parseInt(input.value || '0', 10) || 0; renderQuote(); };
+      row.appendChild(input);
+      items.appendChild(row);
+    });
+
+    document.getElementById('quoteTotal').innerHTML =
+      '<div class="row"><span>预估合计</span><span class="amt">¥ ' + calc.total.toLocaleString() + '</span></div>' +
+      '<div class="hint">分项 ¥ ' + calc.fixed.toLocaleString() + ' + 按量 ¥ ' + calc.varSum.toLocaleString() + ' = ¥ ' + calc.raw.toLocaleString() + ' × 复杂度 ' + calc.coeff + '</div>';
+  }
+
+  function renderLayouts() { renderPills('layouts', LAYOUTS.map(function (l) { return { id: l[0], name: l[1] }; }), state.layout, setLayout); }
+  function renderComponent() {
+    renderPills('cButton', G.component.button, state.component.button, function (v) { state.component.button = v; applyAll(); renderComponent(); });
+    renderPills('cCard', G.component.card, state.component.card, function (v) { state.component.card = v; applyAll(); renderComponent(); });
+    renderPills('cInput', G.component.input, state.component.input, function (v) { state.component.input = v; applyAll(); renderComponent(); });
+  }
+  function renderScene3d() { renderPills('scene3d', G.scene3d, state.scene3d, function (v) { state.scene3d = v; if (state.special.threeD) remountSpecial('threeD'); renderScene3d(); }); }
+  function renderMulti(boxId, items, key) {
+    var box = document.getElementById(boxId);
+    box.innerHTML = '';
+    items.forEach(function (it) {
+      var label = el('label', 'chk');
+      var cb = el('input'); cb.type = 'checkbox'; cb.value = it.id;
+      cb.checked = state[key].indexOf(it.id) >= 0;
+      cb.onchange = function () {
+        if (cb.checked) { if (state[key].indexOf(it.id) < 0) state[key].push(it.id); }
+        else { state[key] = state[key].filter(function (n) { return n !== it.id; }); }
+        applyAll();
+        renderMulti(boxId, items, key);
+      };
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode(it.name));
+      box.appendChild(label);
+    });
+  }
+  function renderMotion() { renderMulti('motion', G.motion, 'motion'); }
+  function renderTransition() { renderMulti('transition', G.transition, 'transition'); }
+  function renderCamera() { renderMulti('camera', G.camera, 'camera'); }
+  function renderLanguage() { renderPills('language', G.language, state.language, function (v) { state.language = v; applyAll(); renderQuote(); renderLanguage(); }); }
+  function renderTone() { renderPills('tone', G.tone, state.tone, function (v) { state.tone = v; applyAll(); renderTone(); }, true); }
+  function renderCreative() { renderPills('creative', G.creative, state.creative, function (v) { state.creative = v; applyAll(); renderCreative(); }, true); }
+
+  function renderEffects() {
+    var box = document.getElementById('effects');
+    box.innerHTML = '';
+    G.effects.forEach(function (e) {
+      var label = el('label', 'chk');
+      var cb = el('input'); cb.type = 'checkbox'; cb.value = e.id;
+      cb.checked = state.effects.indexOf(e.id) >= 0;
+      cb.onchange = function () { toggleEffect(e.id, cb.checked); };
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode(e.name));
+      label.appendChild(el('span', 'fx-tag ' + e.type, e.type));
+      box.appendChild(label);
+    });
+  }
+
+  /* ---------- 状态变更 ---------- */
+  function applyAll() {
+    SGGenes.apply(stage, {
+      motion: state.motion, transition: state.transition, camera: state.camera,
+      component: state.component,
+      language: state.language, tone: state.tone, creative: state.creative
+    });
+    SGEffects.apply(stage, state.effects);
+  }
+
+  function setLayout(id) {
+    state.layout = id;
+    LAYOUTS.forEach(function (l) { stage.classList.remove('layout-' + l[0]); });
+    stage.classList.add('layout-' + id);
+    renderLayouts();
+    renderQuote();
+  }
+  function setTheme(id) {
+    state.theme = id;
+    var p = SG.applyTheme(id, stage);
+    document.getElementById('curName').textContent = p.name;
+    var srcNote = p.sourcedFrom ? ' · 高阶采集' : '';
+    document.getElementById('curMeta').textContent = p.category + srcNote + ' · ' + p.tags.join(' / ');
+    /* 推荐特效 → 行为基因默认档 */
+    var rec = p.recommendedEffects || [];
+    var effectIds = G.effects.map(function (e) { return e.id; });
+    state.effects = effectIds.filter(function (n) { return rec.indexOf(n) >= 0; });
+    state.camera = [rec.indexOf('parallax') >= 0 ? 'parallax' : 'static'];
+    state.transition = [rec.indexOf('page-transition') >= 0 ? 'slide-up' : 'fade'];
+    /* 完整基因（采集预设自带）：覆盖行为 + 内容 */
+    if (p.genes) {
+      if (p.genes.motion) state.motion = [p.genes.motion];
+      if (p.genes.transition) state.transition = [p.genes.transition];
+      if (p.genes.camera) state.camera = [p.genes.camera];
+      if (p.genes.creative) state.creative = p.genes.creative;
+      if (p.genes.tone) state.tone = p.genes.tone;
+    }
+    renderPresets(); renderEffects(); renderCamera(); renderTransition();
+    renderMotion(); renderCreative(); renderTone();
+    /* 主题推荐布局：换主题自动切换骨架，制造主题间排版差异 */
+    if (p.layout && p.layout !== state.layout) setLayout(p.layout);
+    applyAll();
+    renderQuote();
+  }
+  function toggleEffect(name, on) {
+    if (on) { if (state.effects.indexOf(name) < 0) state.effects.push(name); }
+    else { state.effects = state.effects.filter(function (n) { return n !== name; }); }
+    SGEffects.apply(stage, state.effects);
+    renderQuote();
+  }
+
+  function mountSpecial(name) {
+    var slot = stage.querySelector('.sg-slot[data-slot="' + name + '"]');
+    if (!slot) return;
+    if (name === 'particles') state.special[name] = SGSpecial.particles(slot, { count: 70 });
+    else if (name === 'threeD') state.special[name] = SGSpecial.threeD(slot, { shape: state.scene3d, material: 'metal', speed: 1 });
+    else if (name === 'pixel') state.special[name] = SGSpecial.pixelCanvas(slot);
+    else if (name === 'audio') state.special[name] = SGSpecial.audio(slot);
+  }
+  function remountSpecial(name) {
+    if (state.special[name]) { state.special[name].destroy(); delete state.special[name]; }
+    mountSpecial(name);
+  }
+  function toggleSpecial(name, on) {
+    if (on) { if (!state.special[name]) mountSpecial(name); }
+    else { if (state.special[name]) { state.special[name].destroy(); delete state.special[name]; } }
+    renderQuote();
+  }
+  function renderSpecials() {
+    var box = document.getElementById('specials');
+    box.innerHTML = '';
+    SPECIALS.forEach(function (s) {
+      var label = el('label', 'chk');
+      var cb = el('input'); cb.type = 'checkbox'; cb.value = s[0];
+      cb.checked = !!state.special[s[0]];
+      cb.onchange = function () { toggleSpecial(s[0], cb.checked); };
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode(s[1]));
+      box.appendChild(label);
+    });
+  }
+
+  /* ---------- 导出（完整基因组：视觉 + 行为 + 结构 + 内容） ---------- */
+  function buildGenome() {
+    return {
+      meta: { theme: state.theme, exportedAt: new Date().toISOString() },
+      visual: SG.getTheme(state.theme).tokens,
+      behavior: { motion: state.motion, transition: state.transition, camera: state.camera, effects: state.effects },
+      structure: { layout: state.layout, component: state.component, scene3d: state.scene3d },
+      content: { language: state.language, tone: state.tone, creative: state.creative }
+    };
+  }
+  function doExport() {
+    var json = JSON.stringify(buildGenome(), null, 2);
+    document.getElementById('exportArea').value = json;
+    var blob = new Blob([json], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'genome-' + state.theme + '.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+  document.getElementById('btnExport').onclick = doExport;
+  document.getElementById('btnCopy').onclick = function () {
+    var ta = document.getElementById('exportArea');
+    ta.value = JSON.stringify(buildGenome(), null, 2);
+    ta.select();
+    navigator.clipboard && navigator.clipboard.writeText(ta.value);
+  };
+  document.getElementById('btnRandom').onclick = function () {
+    var p = SG.presets[Math.floor(Math.random() * SG.presets.length)];
+    setTheme(p.id);
+  };
+
+  /* ---------- 一键交付：URL 快照 + 完整选型单 ---------- */
+  var SPECIAL_NAME = { particles: '粒子背景', threeD: '3D 容器', pixel: '像素画布', audio: '音频播放器' };
+  function nameOf(list, id) {
+    if (!list || !Array.isArray(list)) return id;
+    if (Array.isArray(id)) {
+      return id.map(function (i) { return nameOf(list, i); }).join(' / ');
+    }
+    var f = list.filter(function (x) { return x.id === id; })[0];
+    return f ? f.name : id;
+  }
+
+  function serializeState() {
+    var sp = {};
+    Object.keys(state.special).forEach(function (k) { sp[k] = true; });
+    return {
+      v: 1, theme: state.theme, layout: state.layout,
+      component: state.component, scene3d: state.scene3d,
+      motion: state.motion, transition: state.transition, camera: state.camera,
+      effects: state.effects, language: state.language,
+      tone: state.tone, creative: state.creative,
+      special: sp, complexity: PRICING.complexity
+    };
+  }
+
+  function restoreState(o) {
+    if (!o || !o.theme) return;
+    setTheme(o.theme);
+    if (o.component) state.component = o.component;
+    if (o.scene3d) state.scene3d = o.scene3d;
+    if (o.motion) state.motion = o.motion;
+    if (o.transition) state.transition = o.transition;
+    if (o.camera) state.camera = o.camera;
+    if (o.effects) state.effects = o.effects;
+    if (o.language) state.language = o.language;
+    if (o.tone !== undefined) state.tone = o.tone;
+    if (o.creative !== undefined) state.creative = o.creative;
+    if (o.special) {
+      Object.keys(state.special).forEach(function (k) { if (state.special[k]) { state.special[k].destroy(); delete state.special[k]; } });
+      Object.keys(o.special).forEach(function (k) { if (o.special[k]) mountSpecial(k); });
+    }
+    if (o.layout && o.layout !== state.layout) setLayout(o.layout);
+    if (o.complexity) PRICING.complexity = o.complexity;
+    renderPresets(); renderLayouts(); renderComponent(); renderScene3d();
+    renderMotion(); renderTransition(); renderCamera(); renderEffects();
+    renderLanguage(); renderTone(); renderCreative(); renderSpecials();
+    applyAll(); renderQuote();
+  }
+
+  function buildShareURL() {
+    return location.href.split('#')[0] + '#g=' + encodeURIComponent(JSON.stringify(serializeState()));
+  }
+
+  function buildBrief() {
+    var p = SG.getTheme(state.theme);
+    var calc = quoteCalc();
+    var sp = Object.keys(state.special).filter(function (k) { return state.special[k]; });
+    var spNames = sp.map(function (k) { return SPECIAL_NAME[k] || k; });
+    var effNames = state.effects.map(function (e) { return nameOf(G.effects, e); });
+    var lines = [];
+    lines.push('【风格基因库 · 客户选型单】');
+    lines.push('主题：' + p.name);
+    lines.push('布局：' + (LAYOUT_NAME[state.layout] || state.layout));
+    lines.push('组件变体：按钮(' + nameOf(G.component.button, state.component.button) + ') · 卡片(' + nameOf(G.component.card, state.component.card) + ') · 输入(' + nameOf(G.component.input, state.component.input) + ')');
+    lines.push('3D 场景：' + nameOf(G.scene3d, state.scene3d));
+    lines.push('动效：' + nameOf(G.motion, state.motion));
+    lines.push('转场：' + nameOf(G.transition, state.transition));
+    lines.push('推镜：' + nameOf(G.camera, state.camera));
+    lines.push('特效：' + (effNames.length ? effNames.join(' / ') : '无'));
+    lines.push('特殊模块：' + (spNames.length ? spNames.join(' / ') : '无'));
+    lines.push('语言：' + nameOf(G.language, state.language));
+    lines.push('文案语气：' + (state.tone ? nameOf(G.tone, state.tone) : '默认'));
+    lines.push('创意方向：' + (state.creative ? nameOf(G.creative, state.creative) : '默认'));
+    lines.push('');
+    lines.push('【报价单】');
+    lines.push('复杂度：' + PRICING.complexity + '（×' + (PRICING.coeff[PRICING.complexity] || 1) + '）');
+    lines.push('预估合计：¥ ' + calc.total.toLocaleString());
+    lines.push('');
+    lines.push('【制作指令】');
+    lines.push('请按以上选型单，用「风格基因库」引擎做一份落地页：套用主题「' + p.name + '」、布局「' + (LAYOUT_NAME[state.layout] || state.layout) + '」，动效/转场/推镜/特效/组件变体/3D/特殊模块如上，文案语言 ' + nameOf(G.language, state.language) + (state.tone ? '、语气 ' + nameOf(G.tone, state.tone) : '') + (state.creative ? '、创意 ' + nameOf(G.creative, state.creative) : '') + '。完整 genome.json：');
+    lines.push('');
+    lines.push(JSON.stringify(buildGenome(), null, 2));
+    return lines.join('\n');
+  }
+
+  function copyText(t, btnId) {
+    function flash() { var b = document.getElementById(btnId); var o = b.textContent; b.textContent = '✅ 已复制'; setTimeout(function () { b.textContent = o; }, 1500); }
+    function fallback() { var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (e) {} document.body.removeChild(ta); flash(); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(flash, fallback);
+    else fallback();
+  }
+  document.getElementById('btnShare').onclick = function () { copyText(buildShareURL(), 'btnShare'); };
+  document.getElementById('btnBrief').onclick = function () { copyText(buildBrief(), 'btnBrief'); };
+
+  /* ---------- 启动 ---------- */
+  buildPage();
+  renderCats();
+  renderPresets();
+  renderPool();
+  renderLayouts();
+  renderComponent();
+  renderScene3d();
+  renderMotion();
+  renderTransition();
+  renderCamera();
+  renderEffects();
+  renderLanguage();
+  renderTone();
+  renderCreative();
+  renderSpecials();
+  setTheme('cyberpunk');
+  /* 从分享链接还原客户勾选 */
+  try {
+    var _m = location.hash.match(/[#&]g=([^&]+)/);
+    if (_m) restoreState(JSON.parse(decodeURIComponent(_m[1])));
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>

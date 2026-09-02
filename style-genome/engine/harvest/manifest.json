@@ -1,0 +1,323 @@
+{
+  "pool": {
+    "resource_sites": {
+      "total": 33,
+      "active": 26,
+      "by_category": {
+        "inspiration": [
+          "awwwards",
+          "dribbble",
+          "behance",
+          "mobbin"
+        ],
+        "ui-components": [
+          "ui-shadcn",
+          "tailwindui",
+          "aceternity-ui",
+          "uiverse"
+        ],
+        "animation": [
+          "gsap-showcase",
+          "animate-style",
+          "motion-dev",
+          "hover-dev"
+        ],
+        "3d-webgl": [
+          "threejs-examples",
+          "react-three-fiber",
+          "spline"
+        ],
+        "ai-media": [
+          "midjourney",
+          "runwayml",
+          "liblib-ai"
+        ],
+        "font-color-asset": [
+          "google-fonts",
+          "coolors",
+          "unsplash",
+          "pexels"
+        ],
+        "data-viz": [
+          "chartjs",
+          "echarts",
+          "d3js",
+          "recharts"
+        ]
+      }
+    },
+    "role_models": [
+      {
+        "id": "lusion",
+        "name": "Lusion",
+        "rank": "high",
+        "type": "3d-webgl"
+      },
+      {
+        "id": "cuberto",
+        "name": "Cuberto",
+        "rank": "high",
+        "type": "ui-ux-agency"
+      },
+      {
+        "id": "nanfu",
+        "name": "NANFU 南孚（国际版）",
+        "rank": "high",
+        "type": "corporate"
+      },
+      {
+        "id": "aurevia",
+        "name": "Aurevia",
+        "rank": "high",
+        "type": "immersive-3d-studio"
+      }
+    ]
+  },
+  "harvested": [
+    {
+      "slug": "lusion",
+      "name": "Lusion",
+      "url": "https://lusion.co",
+      "type": "role-model",
+      "rank": "high",
+      "style": "3D 沉浸式交互叙事 / 画布叙事 / 暗亮双主题",
+      "harvestedAt": "2026-09-02T16:06:30",
+      "source": {
+        "meta": "assets/role-models/lusion/meta.md",
+        "tokens": "assets/role-models/lusion/tokens.json"
+      },
+      "genes": {
+        "visual": {
+          "color": {
+            "palette": [
+              "#FFFFFF",
+              "#000000"
+            ],
+            "hint": {
+              "bg_light": "#ffffff",
+              "bg_dark": "#000000",
+              "text": "#000000",
+              "text_invert": "#ffffff",
+              "accent_grain": "video/texture overlays"
+            }
+          },
+          "font": {
+            "families": [],
+            "hint": {
+              "hero": "large display, near-inverts with theme",
+              "aux": "small, high letter-spacing, minimal HUD"
+            }
+          }
+        },
+        "behavior": {
+          "motion": "sharp",
+          "transition": "slide-up",
+          "camera": "parallax"
+        },
+        "content": {
+          "creative": "data",
+          "tone": "minimal"
+        },
+        "grammar": {
+          "concept": [
+            "C2",
+            "C5"
+          ],
+          "sceneTransition": [
+            "T2",
+            "T4",
+            "T5"
+          ],
+          "textMotion": [
+            "M3",
+            "M5"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "cuberto",
+      "name": "Cuberto",
+      "url": "https://cuberto.com",
+      "type": "role-model",
+      "rank": "high",
+      "style": "设计+开发机构 / 作品集式 / 信息层级教科书",
+      "harvestedAt": "2026-09-02T16:06:30",
+      "source": {
+        "meta": "assets/role-models/cuberto/meta.md",
+        "tokens": "assets/role-models/cuberto/tokens.json"
+      },
+      "genes": {
+        "visual": {
+          "color": {
+            "palette": [],
+            "hint": {
+              "bg": "light, airy",
+              "text": "high-contrast dark on light",
+              "accent": "restrained, brand-focused"
+            }
+          },
+          "font": {
+            "families": [],
+            "hint": {
+              "h1": "strong positioning statement (lead)",
+              "section": "short, scannable service headings"
+            }
+          }
+        },
+        "behavior": {
+          "motion": "calm",
+          "transition": "fade",
+          "camera": "static"
+        },
+        "content": {
+          "creative": "narrative",
+          "tone": "minimal"
+        },
+        "grammar": {
+          "concept": [
+            "C4"
+          ],
+          "sceneTransition": [
+            "T1"
+          ],
+          "textMotion": [
+            "M1"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "nanfu",
+      "name": "NANFU 南孚（国际版）",
+      "url": "https://www.nanfu.global",
+      "type": "role-model",
+      "rank": "high",
+      "style": "制造/集团品牌国际版 / 权威背书 / 数字冲击 / 红黑金",
+      "harvestedAt": "2026-09-02T16:06:30",
+      "source": {
+        "meta": "assets/role-models/nanfu/meta.md",
+        "tokens": "assets/role-models/nanfu/tokens.json"
+      },
+      "genes": {
+        "visual": {
+          "color": {
+            "palette": [
+              "#E2372D",
+              "#000000",
+              "#FFFFFF",
+              "#C9A250"
+            ],
+            "hint": {
+              "brand_red": "#E2372D (high-saturation data accent)",
+              "bg_dark": "#000000 (impact chapters)",
+              "bg_light": "#ffffff (info chapters)",
+              "bg_green": "sustainability chapter",
+              "gold": "#c9a250 (premium product accent)",
+              "text": "high-contrast dark-on-light / red-on-black"
+            }
+          },
+          "font": {
+            "families": [],
+            "hint": {
+              "data_anchor": "超大字号 + 高饱和品牌红 (count-up anchors: 31 / 500+ / 415 / 30+)",
+              "hero_claim": "No.1 Longest Lasting Alkaline Battery (authority claim + MPEI footnote)",
+              "dual_lang": "英文主视觉 + 中文字注分登",
+              "wide_leading": "宽字距英文大标题"
+            }
+          }
+        },
+        "behavior": {
+          "motion": "sharp",
+          "transition": "fade",
+          "camera": "static"
+        },
+        "content": {
+          "creative": "data",
+          "tone": "minimal"
+        },
+        "grammar": {
+          "concept": [
+            "C3",
+            "C6"
+          ],
+          "sceneTransition": [
+            "T3",
+            "T5"
+          ],
+          "textMotion": [
+            "M2",
+            "M6"
+          ]
+        }
+      }
+    },
+    {
+      "slug": "aurevia",
+      "name": "Aurevia",
+      "url": "https://aurevia-studio.pages.dev/",
+      "type": "role-model",
+      "rank": "high",
+      "style": "精品设计工作室 / 3D 粒子走廊空间叙事 / 站点轮播 / 深暖黑+金属金+极光粒子 / HUD 数据化氛围",
+      "harvestedAt": "2026-09-02T16:06:30",
+      "source": {
+        "meta": "assets/role-models/aurevia/meta.md",
+        "tokens": "assets/role-models/aurevia/tokens.json"
+      },
+      "genes": {
+        "visual": {
+          "color": {
+            "palette": [
+              "#0A0805",
+              "#D4AF37"
+            ],
+            "hint": {
+              "bg": "warm near-black #0a0805 (warm-tinted, not pure black)",
+              "accent": "metallic gold #d4af37",
+              "particles": "aurora gradient: warm gold/orange -> teal/green -> coral red",
+              "text": "cream/off-white",
+              "mood": "cinematic, warm, luxurious (film grain + vignette)"
+            }
+          },
+          "font": {
+            "families": [
+              "serif",
+              "sans",
+              "mono"
+            ],
+            "hint": {
+              "display": "serif (humanistic/historical resonance with 'place')",
+              "body": "sans-serif",
+              "hud": "monospace (STATION 01/8, DEPTH 0007 readouts)"
+            }
+          }
+        },
+        "behavior": {
+          "motion": "luxe",
+          "transition": "zoom",
+          "camera": "parallax"
+        },
+        "content": {
+          "creative": "data",
+          "tone": "minimal"
+        },
+        "grammar": {
+          "concept": [
+            "C1",
+            "C5"
+          ],
+          "sceneTransition": [
+            "T6",
+            "T7"
+          ],
+          "textMotion": [
+            "M8",
+            "M9"
+          ]
+        }
+      }
+    }
+  ],
+  "harvestDir": "style-genome/engine/harvest/",
+  "updatedAt": "2026-09-02T16:06:30"
+}

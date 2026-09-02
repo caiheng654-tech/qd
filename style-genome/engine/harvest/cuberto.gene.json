@@ -1,0 +1,52 @@
+{
+  "slug": "cuberto",
+  "name": "Cuberto",
+  "url": "https://cuberto.com",
+  "type": "role-model",
+  "rank": "high",
+  "style": "设计+开发机构 / 作品集式 / 信息层级教科书",
+  "harvestedAt": "2026-09-02T16:06:30",
+  "source": {
+    "meta": "assets/role-models/cuberto/meta.md",
+    "tokens": "assets/role-models/cuberto/tokens.json"
+  },
+  "genes": {
+    "visual": {
+      "color": {
+        "palette": [],
+        "hint": {
+          "bg": "light, airy",
+          "text": "high-contrast dark on light",
+          "accent": "restrained, brand-focused"
+        }
+      },
+      "font": {
+        "families": [],
+        "hint": {
+          "h1": "strong positioning statement (lead)",
+          "section": "short, scannable service headings"
+        }
+      }
+    },
+    "behavior": {
+      "motion": "calm",
+      "transition": "fade",
+      "camera": "static"
+    },
+    "content": {
+      "creative": "narrative",
+      "tone": "minimal"
+    },
+    "grammar": {
+      "concept": [
+        "C4"
+      ],
+      "sceneTransition": [
+        "T1"
+      ],
+      "textMotion": [
+        "M1"
+      ]
+    }
+  }
+}

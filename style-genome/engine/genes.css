@@ -1,0 +1,85 @@
+/* =====================================================================
+ * Style Genome · genes.css（基因细分层样式）
+ * ---------------------------------------------------------------------
+ * 承载「行为基因」「结构基因」的样式，以及「间距 / 排版」细分 token
+ * 的接线。所有 class 都叠加在 .sg-root 上，与视觉基因（CSS 变量）解耦。
+ *
+ *   行为基因：m-*（动效）  tr-*（转场）  cam-*（推镜）
+ *   结构基因：sg-button-* / sg-card-* / sg-input-*（组件变体）
+ *   排版基因：type-sec-center（Hero 居中）
+ * ===================================================================== */
+
+/* ---------- 动效 Motion：全局节奏变量 ---------- */
+.sg-root.m-calm   { --sg-m-dur: .35s; --sg-m-ease: var(--sg-e-out); }
+.sg-root.m-spring { --sg-m-dur: .5s;  --sg-m-ease: var(--sg-e-bounce); }
+.sg-root.m-sharp  { --sg-m-dur: .16s; --sg-m-ease: var(--sg-e-in); }
+.sg-root.m-luxe   { --sg-m-dur: .7s;  --sg-m-ease: var(--sg-e-inout); }
+
+.sg-root .sg-btn, .sg-root .sg-card, .sg-root .sg-plan,
+.sg-root .sg-nav .links a, .sg-root .sg-input, .sg-root .sg-textarea {
+  transition-duration: var(--sg-m-dur, .25s);
+  transition-timing-function: var(--sg-m-ease, var(--sg-e-out));
+}
+.sg-root.m-spring .sg-btn.primary:hover { transform: translateY(-3px) scale(1.04); }
+.sg-root.m-sharp  .sg-btn.primary:hover { transform: translateY(1px); }
+.sg-root.m-luxe   .sg-btn.primary:hover { transform: translateY(-1px); box-shadow: var(--sg-sh-glow); }
+.sg-root.m-luxe   .sg-card:hover        { transform: translateY(-2px); }
+
+/* ---------- 转场 Transition：入场动画 ---------- */
+.sg-root .sg-enter { animation-duration: .8s; animation-fill-mode: both; }
+.sg-root.tr-fade     .sg-enter { animation-name: sg-tr-fade; }
+.sg-root.tr-slide-up .sg-enter { animation-name: sg-tr-slideup; }
+.sg-root.tr-zoom     .sg-enter { animation-name: sg-tr-zoom; }
+.sg-root.tr-flip     .sg-enter { animation-name: sg-tr-flip; }
+.sg-root.tr-none     .sg-enter { animation: none; }
+
+@keyframes sg-tr-fade    { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sg-tr-slideup { from { opacity: 0; transform: translateY(44px); } to { opacity: 1; transform: none; } }
+@keyframes sg-tr-zoom    { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: none; } }
+@keyframes sg-tr-flip    { from { opacity: 0; transform: perspective(1200px) rotateX(-14deg); } to { opacity: 1; transform: none; } }
+
+/* ---------- 推镜 Camera：镜头运动 ---------- */
+.sg-root.cam-zoom .sg-hero > * { animation: sg-cam-zoom 1.2s var(--sg-e-out) both; }
+@keyframes sg-cam-zoom { from { transform: scale(1.14); } to { transform: none; } }
+
+.sg-root.cam-tilt .sg-hero h1 {
+  animation: sg-cam-tilt 6s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+@keyframes sg-cam-tilt {
+  from { transform: perspective(900px) rotateX(0deg) rotateY(-4deg); }
+  to   { transform: perspective(900px) rotateX(2deg) rotateY(4deg); }
+}
+.sg-root.cam-parallax [data-parallax] { will-change: transform; }
+
+/* ---------- 结构 · 组件变体 ---------- */
+/* 按钮 */
+.sg-root.sg-button-pill    .sg-btn { border-radius: 999px; }
+.sg-root.sg-button-sharp   .sg-btn { border-radius: 0; }
+.sg-root.sg-button-outline .sg-btn.primary {
+  background: transparent; color: var(--sg-primary);
+  box-shadow: inset 0 0 0 1.5px var(--sg-primary);
+}
+.sg-root.sg-button-outline .sg-btn.primary:hover { background: var(--sg-primary); color: var(--sg-primary-contrast); }
+
+/* 卡片 */
+.sg-root.sg-card-flat     .sg-card { box-shadow: none; }
+.sg-root.sg-card-outline  .sg-card { box-shadow: none; border: 1.5px solid var(--sg-line); }
+.sg-root.sg-card-hard     .sg-card { box-shadow: 8px 8px 0 var(--sg-ink); }
+.sg-root.sg-card-elevated .sg-card { box-shadow: var(--sg-sh-card); }
+
+/* 输入框 */
+.sg-root.sg-input-pill .sg-input, .sg-root.sg-input-pill .sg-textarea { border-radius: 999px; }
+.sg-root.sg-input-underline .sg-input, .sg-root.sg-input-underline .sg-textarea {
+  border: none; border-bottom: 2px solid var(--sg-line);
+  border-radius: 0; background: transparent;
+}
+.sg-root.sg-input-underline .sg-input:focus, .sg-root.sg-input-underline .sg-textarea:focus {
+  box-shadow: none; border-bottom-color: var(--sg-primary);
+}
+
+/* ---------- 排版基因：Hero 居中 ---------- */
+.sg-root.type-sec-center .sg-hero { text-align: center; }
+.sg-root.type-sec-center .sg-hero .cta { justify-content: center; }
+.sg-root.type-sec-center .sg-hero h1,
+.sg-root.type-sec-center .sg-hero .sub { margin-left: auto; margin-right: auto; }

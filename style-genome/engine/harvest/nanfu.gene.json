@@ -1,0 +1,65 @@
+{
+  "slug": "nanfu",
+  "name": "NANFU 南孚（国际版）",
+  "url": "https://www.nanfu.global",
+  "type": "role-model",
+  "rank": "high",
+  "style": "制造/集团品牌国际版 / 权威背书 / 数字冲击 / 红黑金",
+  "harvestedAt": "2026-09-02T16:06:30",
+  "source": {
+    "meta": "assets/role-models/nanfu/meta.md",
+    "tokens": "assets/role-models/nanfu/tokens.json"
+  },
+  "genes": {
+    "visual": {
+      "color": {
+        "palette": [
+          "#E2372D",
+          "#000000",
+          "#FFFFFF",
+          "#C9A250"
+        ],
+        "hint": {
+          "brand_red": "#E2372D (high-saturation data accent)",
+          "bg_dark": "#000000 (impact chapters)",
+          "bg_light": "#ffffff (info chapters)",
+          "bg_green": "sustainability chapter",
+          "gold": "#c9a250 (premium product accent)",
+          "text": "high-contrast dark-on-light / red-on-black"
+        }
+      },
+      "font": {
+        "families": [],
+        "hint": {
+          "data_anchor": "超大字号 + 高饱和品牌红 (count-up anchors: 31 / 500+ / 415 / 30+)",
+          "hero_claim": "No.1 Longest Lasting Alkaline Battery (authority claim + MPEI footnote)",
+          "dual_lang": "英文主视觉 + 中文字注分登",
+          "wide_leading": "宽字距英文大标题"
+        }
+      }
+    },
+    "behavior": {
+      "motion": "sharp",
+      "transition": "fade",
+      "camera": "static"
+    },
+    "content": {
+      "creative": "data",
+      "tone": "minimal"
+    },
+    "grammar": {
+      "concept": [
+        "C3",
+        "C6"
+      ],
+      "sceneTransition": [
+        "T3",
+        "T5"
+      ],
+      "textMotion": [
+        "M2",
+        "M6"
+      ]
+    }
+  }
+}
